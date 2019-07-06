@@ -1,52 +1,74 @@
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Color Seletor</title>
-		<meta charset="UTF-8"> 
-		<link href="css/index.css?v=5" rel="stylesheet" type="text/css"/>
-		<script src='js/index.js?v=2' defer></script>
-		<script src="js/take_photo.js?v=1" defer></script>
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-	</head>
-	<body>
-		<main>
-			<div class='chooseInput'>
-			  <label onclick="change_state('video')">Take Photo</label>
-			  <div class="image-upload">
-				  <label for="file-input">Choose File</label>
-  				  <input id="file-input" type="file" accept=".tif,.jpg,.gif,.png,.raw" onchange="uploadPic()">
-			  </div>
-			 </div>
+  <head>
+    <title>Color Seletor</title>
+    <meta charset="UTF-8" />
+    <link href="css/index.css?v=5" rel="stylesheet" type="text/css" />
+    <script src="js/index.js?v=2" defer></script>
+    <script src="js/take_photo.js?v=1" defer></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+  </head>
+  <body>
+    <main>
+      <div>
+        <label onclick="change_state('video')">Take Photo</label>
+        <div class="image-upload">
+          <label for="file-input">Choose File</label>
+          <input
+            id="file-input"
+            type="file"
+            accept=".tif,.jpg,.gif,.png,.raw"
+            onchange="uploadPic()"
+          />
+        </div>
+      </div>
 
-			<div class='takePic'>
-				<nav>
-				<a onclick="change_state('input')" class="previous">&#129092;</a>
-				<h1>Select image</h1></nav>
-			  	<div class="select">
-					<label for="videoSource">Video source: </label><select id="videoSource"></select>
-			  	</div>
-			  	<video autoplay></video>
-			  	<button onclick="grabFrame()">Grab Frame</button>
-			</div>
+      <div>
+        <nav>
+          <a onclick="change_state('input')" class="previous">&#129092;</a>
+          <h1>Select image</h1>
+        </nav>
+        <div class="select">
+          <label for="videoSource">Video source: </label>
+          <select id="videoSource"></select>
+        </div>
+        <video autoplay></video>
+        <label onclick="grabFrame()">Grab Frame</label>
+      </div>
 
-			<div class='chooseScale'>
-				<nav><a onclick="change_state('video')" class="previous">&#129092;</a>
-				<h1>Calibrate</h1></nav>
-				<canvas id="ScaleCanvas"></canvas>
-				<button onclick="change_state('processing')">Confirm</button>
-				<button id="ScaleUndo">Reset</button>
-			</div>
+      <div>
+        <nav>
+          <a onclick="change_state('video')" class="previous">&#129092;</a>
+          <h1>Calibrate</h1>
+        </nav>
+        <div class="canvas_container">
+          <canvas id="ScaleCanvas"></canvas>
+        </div>
+        <label onclick="change_state('processing')">Confirm</label>
+        <label id="ScaleUndo">Reset</label>
+      </div>
 
-			<div class='chooseTolerance'>
-				<nav><a onclick="change_state('scale')" class="previous">&#129092;</a>
-				<h1>Compute</h1></nav>
-				<canvas id="SelectionCanvas"></canvas>
-				<div class="slidecontainer">
-					<input type="range" min="0" max="255" value="40" class="slider" id="toleranceRange">
-					<p>Tolerance: <span id="toleranceVal"></span></p>
-					<p>Area seleted (cm<sup>2</sup>): <span id="areaVal">0</span></p>
-				</div>
-			</div>
-		</main>
-	</body>
+      <div>
+        <nav>
+          <a onclick="change_state('scale')" class="previous">&#129092;</a>
+          <h1>Compute</h1>
+        </nav>
+        <div class="canvas_container">
+          <canvas id="SelectionCanvas"></canvas>
+        </div>
+        <div class="slidecontainer">
+          <input
+            type="range"
+            min="0"
+            max="220"
+            value="40"
+            class="slider"
+            id="toleranceRange"
+          />
+          Tolerance: <span id="toleranceVal"></span>
+          <h4>Area seleted (cm<sup>2</sup>): <span id="areaVal">0</span></h4>
+        </div>
+      </div>
+    </main>
+  </body>
 </html>
