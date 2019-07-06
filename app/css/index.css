@@ -1,6 +1,8 @@
 body {
   font-family: Tahoma, Geneva, sans-serif;
   font-size: 1.6em;
+  background: #E1E2E1;
+  
 }
 
 /*Outermost flex container*/
@@ -58,6 +60,7 @@ select {
 .select label {
   background: none;
   color: black;
+  font-size: 0.8em;
 }
 
 /*SLIDER*/
@@ -89,14 +92,14 @@ select {
   appearance: none;
   width: 25px; /* Set a specific slider handle width */
   height: 25px; /* Slider handle height */
-  background: #4caf50; /* Green background */
+  background: #005662; /* Green background */
   cursor: pointer; /* Cursor on hover */
 }
 
 .slider::-moz-range-thumb {
   width: 25px; /* Set a specific slider handle width */
   height: 25px; /* Slider handle height */
-  background: #4caf50; /* Green background */
+  background: #005662; /* Green background */
   cursor: pointer; /* Cursor on hover */
 }
 
@@ -137,4 +140,11 @@ h1 {
   color: white;
   font-weight: 400;
   display: inline;
+}
+
+h4 {
+	text-align:center;
+	background: #005662;
+	color:white;
+	font-weight: 400;
 }

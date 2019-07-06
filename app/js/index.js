@@ -19,7 +19,7 @@ function init_canvas(img) {
   var img_h = img.height;
 
   //Fit the img size to the screen
-  while (img_w > window.innerWidth || img_h > window.innerHeight - 150) {
+  while (img_w > window.innerWidth || img_h > window.innerHeight - 180) {
     img_w *= 0.9;
     img_h *= 0.9;
   }
@@ -70,7 +70,7 @@ function select_area() {
         floodfill(
           point_clicked.x,
           point_clicked.y,
-          { a: 255, r: 0, g: 255, b: 0 },
+          { a: 255, r: 178, g: 255, b: 89 },
           img,
           canvas.width,
           canvas.height,
@@ -100,7 +100,7 @@ function select_area() {
         floodfill(
           point_clicked.x,
           point_clicked.y,
-          { a: 255, r: 0, g: 255, b: 0 },
+          { a: 255, r: 178, g: 255, b: 89 },
           img,
           canvas.width,
           canvas.height,
