@@ -1,3 +1,9 @@
+//The new width and height of image on canvas
+var new_img_width,
+  new_img_height = 0;
+//The position of the image on canvas
+var img_x,
+  img_y = 0;
 //Keep track of the total pixels
 var total_pix = 0;
 //To store the orinal copy of img
@@ -13,35 +19,42 @@ var first_area_event = true;
 //Initialize canvas
 function init_canvas(img) {
   var canvas_arr = document.querySelectorAll('canvas');
-  var slider_container = document.querySelector('div.slidecontainer');
-  //Resize the canvas and picture to fit in the window
-  var img_w = img.width;
-  var img_h = img.height;
-
-  //Fit the img size to the screen
-  while (img_w > window.innerWidth || img_h > window.innerHeight - 180) {
-    img_w *= 0.9;
-    img_h *= 0.9;
-  }
-
-  //Resize the slider width as same as img
-  slider_container.style.width = img_w - 1 + 'px';
+  var slider_container = document.getElementById('slidecontainer');
 
   //Display img on all canvas
   for (canvas of canvas_arr) {
-    canvas.width = img_w;
-    canvas.height = img_h;
-    //Display the image
+    //Set the canvas to be fix-sized
+    canvas.width = document.querySelector('nav').clientWidth;
+    canvas.height = window.innerHeight * 0.5;
+
+    //Proportionally fit the image size to the width of canvas
+    var ratio = img.width / img.height;
+    new_img_width = canvas.width;
+    new_img_height = new_img_width / ratio;
+
+    //If the new height is still larger the the canvas height, proprtionally fit the image to the height of canvas
+    if (new_img_height > canvas.height) {
+      new_img_height = canvas.height;
+      new_img_width = new_img_height * ratio;
+    }
+
+    //Find the cordinate to put the img at middle
+    img_x = Math.round(canvas.width / 2 - new_img_width / 2);
+    img_y = Math.round(canvas.height / 2 - new_img_height / 2);
+
+    //Display the image at the center of the canvas in right size and proportion
     var ctx = canvas.getContext('2d');
-    console.log('orin dim: ', canvas.width, canvas.height);
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    ctx.drawImage(img, img_x, img_y, new_img_width, new_img_height);
   }
+
+  //Resize the slider width as same as canvas
+  slider_container.style.width = new_img_width + 'px';
 
   //Save an orinal copy of the img
   var img = document
     .getElementById('SelectionCanvas')
     .getContext('2d')
-    .getImageData(0, 0, canvas.width, canvas.height);
+    .getImageData(img_x, img_y, new_img_width, new_img_height);
   init_img_json = JSON.stringify(img);
 }
 
@@ -60,25 +73,39 @@ function select_area() {
     slider.oninput = function() {
       output.innerHTML = this.value;
       if (point_clicked != null) {
-        total_pix = 0;
-        //Get the canvas and context for area selecction
-        var canvas = document.getElementById('SelectionCanvas');
-        var ctx = canvas.getContext('2d');
-        var img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+        // check x/y coordinate against the image position and dimension
+        if (
+          point_clicked.x >= img_x &&
+          point_clicked.x <= img_x + new_img_width &&
+          point_clicked.y >= img_y &&
+          point_clicked.y <= img_y + new_img_height
+        ) {
+          total_pix = 0;
+          //Get the canvas and context for area selecction
+          var canvas = document.getElementById('SelectionCanvas');
+          var ctx = canvas.getContext('2d');
+          var img = ctx.getImageData(
+            img_x,
+            img_y,
+            new_img_width,
+            new_img_height
+          );
+          update_img(JSON.parse(init_img_json), img); //Access the unclicked image data and convert its type to img
 
-        update_img(JSON.parse(init_img_json), img); //Access the unclicked image data and convert its type to img
-        floodfill(
-          point_clicked.x,
-          point_clicked.y,
-          { a: 255, r: 178, g: 255, b: 89 },
-          img,
-          canvas.width,
-          canvas.height,
-          this.value
-        );
-        document.getElementById('areaVal').innerHTML = (
-          total_pix / pix_area_conv_fac
-        ).toFixed(4); // Display the seleted area
+          floodfill(
+            point_clicked.x,
+            point_clicked.y,
+            { a: 255, r: 178, g: 255, b: 89 },
+            img,
+            img.width,
+            img.height,
+            this.value
+          );
+
+          document.getElementById('areaVal').innerHTML = (
+            total_pix / pix_area_conv_fac
+          ).toFixed(2); // Display the seleted area
+        }
       }
     };
 
@@ -86,34 +113,50 @@ function select_area() {
     canvas.addEventListener(
       'mouseup',
       function(event) {
-        total_pix = 0;
-        //Get the canvas and context for area selecction
-        var canvas = document.getElementById('SelectionCanvas');
-        var ctx = canvas.getContext('2d');
-        var img = ctx.getImageData(0, 0, canvas.width, canvas.height);
-
-        update_img(JSON.parse(init_img_json), img); //Access the unclicked image data and convert its type to img
-
         //Get the point clicked
-        point_clicked = getPosition('SelectionCanvas', event, 'screen');
+        point_clicked = getPosition('SelectionCanvas', event, 'canvas');
+        console.log('x:', point_clicked.x, 'y', point_clicked.y);
+        //check if it's clicked on img
+        if (
+          point_clicked.x >= img_x &&
+          point_clicked.x <= img_x + new_img_width &&
+          point_clicked.y >= img_y &&
+          point_clicked.y <= img_y + new_img_height
+        ) {
+          total_pix = 0;
+          //Get the acual point clicked on image
+          point_clicked = getPosition('SelectionCanvas', event, 'screen');
+          //Get the canvas and context for area selecction
+          var canvas = document.getElementById('SelectionCanvas');
+          var ctx = canvas.getContext('2d');
+          var img = ctx.getImageData(
+            img_x,
+            img_y,
+            new_img_width,
+            new_img_height
+          );
+          update_img(JSON.parse(init_img_json), img); //Access the unclicked image data and convert its type to img
 
-        floodfill(
-          point_clicked.x,
-          point_clicked.y,
-          { a: 255, r: 178, g: 255, b: 89 },
-          img,
-          canvas.width,
-          canvas.height,
-          slider.value
-        );
-        draw_point(
-          ctx,
-          getPosition('SelectionCanvas', event, 'canvas').x,
-          getPosition('SelectionCanvas', event, 'canvas').y
-        );
-        document.getElementById('areaVal').innerHTML = (
-          total_pix / pix_area_conv_fac
-        ).toFixed(4); // Display the seleted area
+          floodfill(
+            point_clicked.x,
+            point_clicked.y,
+            { a: 255, r: 178, g: 255, b: 89 },
+            img,
+            img.width,
+            img.height,
+            slider.value
+          );
+
+          draw_point(
+            ctx,
+            getPosition('SelectionCanvas', event, 'canvas').x,
+            getPosition('SelectionCanvas', event, 'canvas').y
+          );
+
+          document.getElementById('areaVal').innerHTML = (
+            total_pix / pix_area_conv_fac
+          ).toFixed(2); // Display the seleted area
+        }
       },
       false
     );
@@ -133,8 +176,9 @@ function getPosition(canvas_id, event, mode) {
   var x, y;
 
   if (mode == 'screen') {
-    x = event.offsetX;
-    y = event.offsetY;
+    //Substract the moved distance
+    x = event.offsetX - img_x;
+    y = event.offsetY - img_y;
   }
 
   if (mode == 'canvas') {
@@ -168,12 +212,13 @@ var first_scale_event = true; //Check if the func is called first time
 function choose_scale() {
   var canvas = document.getElementById('ScaleCanvas');
   var ctx = canvas.getContext('2d');
-  var img = ctx.getImageData(0, 0, canvas.width, canvas.height);
+  var img = ctx.getImageData(img_x, img_y, new_img_width, new_img_height);
 
   var undo_but = document.getElementById('ScaleUndo');
   undo_but.onclick = function() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height); //Clear the canvas first
     update_img(JSON.parse(init_img_json), img); //Access the unclicked image data and convert its type to img
-    ctx.putImageData(img, 0, 0);
+    ctx.putImageData(img, img_x, img_y);
     scale_point_arr = [];
   };
   if (first_scale_event) {
@@ -182,29 +227,36 @@ function choose_scale() {
       function(event) {
         //Get the point clicked
         point_clicked = getPosition('ScaleCanvas', event, 'canvas');
+        //check if it's clicked on img
+        if (
+          point_clicked.x >= img_x &&
+          point_clicked.x <= img_x + new_img_width &&
+          point_clicked.y >= img_y &&
+          point_clicked.y <= img_y + new_img_height
+        ) {
+          //When less than 2 points in arr, draw it
+          if (scale_point_arr.length < 2) {
+            draw_point(ctx, point_clicked.x, point_clicked.y);
+          }
 
-        //When less than 2 points in arr, draw it
-        if (scale_point_arr.length < 2) {
-          draw_point(ctx, point_clicked.x, point_clicked.y);
-        }
+          //Push the selected point into the arr
+          scale_point_arr.push(point_clicked);
 
-        //Push the selected point into the arr
-        scale_point_arr.push(point_clicked);
-
-        //When two points in arr, do the area conversion
-        if (scale_point_arr.length == 2) {
-          var diff_x = scale_point_arr[0].x - scale_point_arr[1].x;
-          var diff_y = scale_point_arr[0].y - scale_point_arr[1].y;
-          var distance = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
-          pix_area_conv_fac = distance * distance;
-          draw_line_with_text(
-            ctx,
-            scale_point_arr[0].x,
-            scale_point_arr[0].y,
-            scale_point_arr[1].x,
-            scale_point_arr[1].y,
-            '1CM'
-          );
+          //When two points in arr, do the area conversion
+          if (scale_point_arr.length == 2) {
+            var diff_x = scale_point_arr[0].x - scale_point_arr[1].x;
+            var diff_y = scale_point_arr[0].y - scale_point_arr[1].y;
+            var distance = Math.sqrt(diff_x * diff_x + diff_y * diff_y);
+            pix_area_conv_fac = distance * distance;
+            draw_line_with_text(
+              ctx,
+              scale_point_arr[0].x,
+              scale_point_arr[0].y,
+              scale_point_arr[1].x,
+              scale_point_arr[1].y,
+              '1CM'
+            );
+          }
         }
       },
       false
@@ -320,7 +372,7 @@ function floodfill(x, y, fillcolor, img, width, height, tolerance) {
   document
     .getElementById('SelectionCanvas')
     .getContext('2d')
-    .putImageData(img, 0, 0); //display in the right context
+    .putImageData(img, img_x, img_y); //display in the right context
 }
 
 function pixelCompare(

@@ -1,8 +1,7 @@
 body {
   font-family: Tahoma, Geneva, sans-serif;
   font-size: 1.6em;
-  background: #E1E2E1;
-  
+  background: #e1e2e1;
 }
 
 /*Outermost flex container*/
@@ -63,12 +62,7 @@ select {
   font-size: 0.8em;
 }
 
-/*SLIDER*/
-.slidecontainer {
-  width: 100%; /* Width of the outside container */
-}
-
-/* The slider itself */
+/*Slider*/
 .slider {
   -webkit-appearance: none; /* Override default CSS styles */
   appearance: none;
@@ -143,8 +137,8 @@ h1 {
 }
 
 h4 {
-	text-align:center;
-	background: #005662;
-	color:white;
-	font-weight: 400;
+  text-align: center;
+  background: #005662;
+  color: white;
+  font-weight: 400;
 }
