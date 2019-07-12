@@ -2,6 +2,7 @@ body {
   font-family: Tahoma, Geneva, sans-serif;
   font-size: 1.6em;
   background: #e1e2e1;
+  margin: 0;
 }
 
 /*To style the big container for all nav and footer frames*/
@@ -186,5 +187,5 @@ canvas {
 
 /*To make the copy right font size small*/
 footer > div:first-child {
-  font-size: 0.7em;
+  font-size: 0.6em;
 }
