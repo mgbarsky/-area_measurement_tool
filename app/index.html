@@ -19,7 +19,7 @@
         </h1>
 
         <h1>
-          <a onclick="change_state('video')" class="previous">&#129092;</a>
+          <a onclick="change_state('input')" class="previous">&#129092;</a>
           Calibrate
         </h1>
 
@@ -43,10 +43,6 @@
       </div>
 
       <div id="video_container">
-        <div class="select">
-          <label for="videoSource">Video source: </label>
-          <select id="videoSource"></select>
-        </div>
         <video autoplay></video>
       </div>
 
@@ -59,6 +55,10 @@
         </div>
 
         <div>
+          <div class="select">
+            <label for="videoSource">Video source: </label>
+            <select id="videoSource"></select>
+          </div>
           <label onclick="grabFrame()">Grab Frame</label>
         </div>
 

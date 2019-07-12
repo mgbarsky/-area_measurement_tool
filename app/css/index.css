@@ -21,7 +21,6 @@ nav {
   background-color: #005662;
 }
 footer {
-  height: 5cm;
   bottom: 0;
 }
 
@@ -34,11 +33,18 @@ footer > div {
   align-items: center;
 }
 
+footer > div {
+  flex-direction: column;
+}
+
 /*To style the main cotainers (between nav and footer)*/
 main > div,
 canvas {
   position: fixed;
-  top: 120px;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: calc(100vh - 300px);
   z-index: 0;
 }
 /*To make canvas, choose button, and video container centered*/
@@ -92,6 +98,7 @@ label {
   padding: 0.5ex;
   border: none;
   border-radius: 3px;
+  user-select: none;
 }
 /*To create the clicked effects*/
 label:active {

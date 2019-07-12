@@ -74,20 +74,23 @@ function select_area() {
   var slider = document.getElementById('toleranceRange');
   var output = document.getElementById('toleranceVal');
   output.innerHTML = slider.value; // display the default slider value
-  var point_clicked = null; //keep track of the point clicked
+  var point_clicked_on_screen = null; //keep track of the point clicked on screen
+  var point_clicked_on_canvas = null; //keep track of the point clicked on canvas
+
   if (first_area_event) {
     // Update the current slider value and the area with new tolerance
     slider.oninput = function() {
       output.innerHTML = this.value;
-      if (point_clicked != null) {
+      if (point_clicked_on_canvas != null) {
         // check x/y coordinate against the image position and dimension
         if (
-          point_clicked.x >= img_x &&
-          point_clicked.x <= img_x + new_img_width &&
-          point_clicked.y >= img_y &&
-          point_clicked.y <= img_y + new_img_height
+          point_clicked_on_canvas.x >= img_x &&
+          point_clicked_on_canvas.x <= img_x + new_img_width &&
+          point_clicked_on_canvas.y >= img_y &&
+          point_clicked_on_canvas.y <= img_y + new_img_height
         ) {
           total_pix = 0;
+          console.log('Slider activated');
           //Get the canvas and context for area selecction
           var canvas = document.getElementById('SelectionCanvas');
           var ctx = canvas.getContext('2d');
@@ -100,8 +103,8 @@ function select_area() {
           update_img(JSON.parse(init_img_json), img); //Access the unclicked image data and convert its type to img
 
           floodfill(
-            point_clicked.x,
-            point_clicked.y,
+            point_clicked_on_screen.x,
+            point_clicked_on_screen.y,
             FILL_COLOR,
             img,
             img.width,
@@ -121,18 +124,26 @@ function select_area() {
       'mouseup',
       function(event) {
         //Get the point clicked
-        point_clicked = getPosition('SelectionCanvas', event, 'canvas');
-        console.log('x:', point_clicked.x, 'y', point_clicked.y);
+        point_clicked_on_canvas = getPosition(
+          'SelectionCanvas',
+          event,
+          'canvas'
+        );
+
         //check if it's clicked on img
         if (
-          point_clicked.x >= img_x &&
-          point_clicked.x <= img_x + new_img_width &&
-          point_clicked.y >= img_y &&
-          point_clicked.y <= img_y + new_img_height
+          point_clicked_on_canvas.x >= img_x &&
+          point_clicked_on_canvas.x <= img_x + new_img_width &&
+          point_clicked_on_canvas.y >= img_y &&
+          point_clicked_on_canvas.y <= img_y + new_img_height
         ) {
           total_pix = 0;
           //Get the acual point clicked on image
-          point_clicked = getPosition('SelectionCanvas', event, 'screen');
+          point_clicked_on_screen = getPosition(
+            'SelectionCanvas',
+            event,
+            'screen'
+          );
           //Get the canvas and context for area selecction
           var canvas = document.getElementById('SelectionCanvas');
           var ctx = canvas.getContext('2d');
@@ -145,8 +156,8 @@ function select_area() {
           update_img(JSON.parse(init_img_json), img); //Access the unclicked image data and convert its type to img
 
           floodfill(
-            point_clicked.x,
-            point_clicked.y,
+            point_clicked_on_screen.x,
+            point_clicked_on_screen.y,
             FILL_COLOR,
             img,
             img.width,
@@ -456,6 +467,7 @@ function change_state(state) {
     document.querySelector('main').className = 'ChooseInputFrame';
     document.getElementById('input_button_container').style.display = 'flex';
     document.getElementById('video_container').style.display = 'none';
+    document.getElementById('ScaleCanvas').style.display = 'none';
   }
   //change to takePic frame
   if (state == 'video') {
