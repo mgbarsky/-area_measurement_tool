@@ -1,0 +1,86 @@
+* {
+  background: rgba(0, 0, 0, 0.05);
+  box-sizing: border-box;
+}
+
+body {
+  margin: none;
+}
+
+canvas {
+  width: calc(100vw - 160px);
+  height: calc(100vh - 6cm - 80px);
+  position: fixed;
+  top: 80px;
+  left: 80px;
+  z-index: 0;
+  background: orange;
+}
+
+nav,
+footer {
+  transition: left 0.4s;
+  position: fixed;
+  display: flex;
+  z-index: 100;
+  left: 0;
+}
+
+h1 {
+  margin: 0;
+  padding: 1ex;
+}
+
+nav > h1,
+footer > div {
+  width: 100vw;
+}
+
+nav > .S1,
+footer > .S1 {
+  background: red;
+}
+
+nav > .S2,
+footer > .S2 {
+  background: green;
+}
+
+nav > .S3,
+footer > .S3 {
+  background: blue;
+}
+
+nav > .S4,
+footer > .S4 {
+  background: yellow;
+}
+
+body.S1 nav,
+body.S1 footer {
+  left: 0;
+}
+
+body.S2 nav,
+body.S2 footer {
+  left: -100vw;
+}
+
+body.S3 nav,
+body.S3 footer {
+  left: -200vw;
+}
+
+body.S4 nav,
+body.S4 footer {
+  left: -300vw;
+}
+
+nav {
+  top: 0;
+}
+
+footer {
+  height: 5cm;
+  bottom: 0;
+}

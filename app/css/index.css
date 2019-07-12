@@ -4,34 +4,81 @@ body {
   background: #e1e2e1;
 }
 
-/*Outermost flex container*/
-main {
+/*To style the big container for all nav and footer frames*/
+nav,
+footer {
   transition: left 0.4s;
   position: fixed;
   display: flex;
+  z-index: 100;
+  left: 0;
 }
 
-/*Flex container of each frame*/
+/*To sytle nav and footer differently*/
+nav {
+  top: 0;
+  background-color: #005662;
+}
+footer {
+  height: 5cm;
+  bottom: 0;
+}
+
+/*Style each frame by giving them a 100vw*/
+nav > h1,
+footer > div {
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/*To style the main cotainers (between nav and footer)*/
+main > div,
+canvas {
+  position: fixed;
+  top: 120px;
+  z-index: 0;
+}
+/*To make canvas, choose button, and video container centered*/
+main,
 main > div {
   width: 100vw;
-  height: 100vh;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
-
-/*For changing states*/
-body.ChooseInputFrame main {
+/*Makes the containers exept canvas responsive*/
+main > div {
+  height: calc(100vh - 300px);
   left: 0;
 }
-body.TakePicFrame main {
+
+/*To make the video as large as possible*/
+video {
+  width: 100%;
+  height: 100%;
+}
+
+/*For changing states (frames) of nav and footer*/
+main.ChooseInputFrame nav,
+main.ChooseInputFrame footer {
+  left: 0;
+}
+
+main.TakePicFrame nav,
+main.TakePicFrame footer {
   left: -100vw;
 }
-body.ChooseScaleFrame main {
+
+main.ChooseScaleFrame nav,
+main.ChooseScaleFrame footer {
   left: -200vw;
 }
-body.AreaProcessingFrame main {
+
+main.AreaProcessingFrame nav,
+main.AreaProcessingFrame footer {
   left: -300vw;
 }
 
@@ -97,11 +144,6 @@ select {
   cursor: pointer; /* Cursor on hover */
 }
 
-/*To prvent video from overflow to other frames*/
-video {
-  max-width: 100vw;
-}
-
 /*Hide the file input to style it differently with a label*/
 .image-upload > input {
   display: none;
@@ -120,25 +162,29 @@ a:hover {
   color: grey;
 }
 
-/*To style the header*/
-nav {
-  width: 25.2em;
-  max-width: 100vw;
-  margin-bottom: 1ex;
-  background-color: #005662;
-}
-
 /*To style the title*/
 h1 {
   text-align: center;
   color: white;
   font-weight: 400;
-  display: inline;
+  margin: 0.1cm 0 0.1cm 0;
 }
 
+/*To style the container for the numeric results of area computation*/
 h4 {
   text-align: center;
   background: #005662;
   color: white;
   font-weight: 400;
+}
+
+/*For hiding containers in the begining frame*/
+#video_container,
+canvas {
+  display: none;
+}
+
+/*To make the copy right font size small*/
+footer > div:first-child {
+  font-size: 0.7em;
 }

@@ -1,3 +1,5 @@
+//The color to fill the selected area
+var FILL_COLOR = { a: 255, r: 178, g: 255, b: 89 };
 //The new width and height of image on canvas
 var new_img_width,
   new_img_height = 0;
@@ -8,26 +10,31 @@ var img_x,
 var total_pix = 0;
 //To store the orinal copy of img
 var init_img_json;
-//To save all frames of img when changes are made by users
-var img_json_arr = [];
 //store area conversion factor
 var pix_area_conv_fac = 0;
 //Arr to store clicked points
 var scale_point_arr = [];
-
+//Check if the choose_scale function is first runed
+//to not run the event lisener mutiple times when go back button is clicked
+var first_scale_event = true;
+//Check if the select_area function is first runed
+//to not run the event lisener mutiple times when go back button is clicked
 var first_area_event = true;
-//Initialize canvas
-function init_canvas(img) {
-  var canvas_arr = document.querySelectorAll('canvas');
+
+//PROGRAM START WITH GETING PIC
+get_media();
+
+//Initialize canvas with the input pic (Resizing img from line 28 to 55)
+function canvas_init(img) {
+  var canvas_arr = document.querySelectorAll('canvas'); //Select all canvas(2)
   var slider_container = document.getElementById('slidecontainer');
 
-  //Display img on all canvas
+  //Display the img on all canvas
   for (canvas of canvas_arr) {
-    //Set the canvas to be fix-sized
-    canvas.width = document.querySelector('nav').clientWidth;
-    canvas.height = window.innerHeight * 0.5;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight - 300;
 
-    //Proportionally fit the image size to the width of canvas
+    //Try proportionally fiting the image size to the width of canvas
     var ratio = img.width / img.height;
     new_img_width = canvas.width;
     new_img_height = new_img_width / ratio;
@@ -50,7 +57,7 @@ function init_canvas(img) {
   //Resize the slider width as same as canvas
   slider_container.style.width = new_img_width + 'px';
 
-  //Save an orinal copy of the img
+  //Save an original copy of the img in the format of json
   var img = document
     .getElementById('SelectionCanvas')
     .getContext('2d')
@@ -95,7 +102,7 @@ function select_area() {
           floodfill(
             point_clicked.x,
             point_clicked.y,
-            { a: 255, r: 178, g: 255, b: 89 },
+            FILL_COLOR,
             img,
             img.width,
             img.height,
@@ -140,7 +147,7 @@ function select_area() {
           floodfill(
             point_clicked.x,
             point_clicked.y,
-            { a: 255, r: 178, g: 255, b: 89 },
+            FILL_COLOR,
             img,
             img.width,
             img.height,
@@ -208,7 +215,6 @@ function draw_line_with_text(ctx, x1, y1, x2, y2, text) {
   ctx.fillText(text, x2 + 10, y2 + 10);
 }
 
-var first_scale_event = true; //Check if the func is called first time
 function choose_scale() {
   var canvas = document.getElementById('ScaleCanvas');
   var ctx = canvas.getContext('2d');
@@ -445,17 +451,32 @@ function pixelCompareAndSet(
 
 //To swich b/w frames
 function change_state(state) {
-  if (state == 'input')
-    document.querySelector('body').className = 'ChooseInputFrame';
-  if (state == 'video')
-    document.querySelector('body').className = 'TakePicFrame'; //change to takePic frame
-
+  // change to the choose input frame
+  if (state == 'input') {
+    document.querySelector('main').className = 'ChooseInputFrame';
+    document.getElementById('input_button_container').style.display = 'flex';
+    document.getElementById('video_container').style.display = 'none';
+  }
+  //change to takePic frame
+  if (state == 'video') {
+    document.querySelector('main').className = 'TakePicFrame';
+    document.getElementById('input_button_container').style.display = 'none';
+    document.getElementById('video_container').style.display = 'flex';
+    document.getElementById('ScaleCanvas').style.display = 'none';
+  }
+  //change to choose scale frame
   if (state == 'scale') {
     choose_scale(); // send the pic to scale
-    document.querySelector('body').className = 'ChooseScaleFrame'; //change to choose scale frame
+    document.querySelector('main').className = 'ChooseScaleFrame';
+    document.getElementById('video_container').style.display = 'none';
+    document.getElementById('ScaleCanvas').style.display = 'block';
+    document.getElementById('SelectionCanvas').style.display = 'none';
   }
+  //change to choose tolerance frame
   if (state == 'processing') {
     select_area();
-    document.querySelector('body').className = 'AreaProcessingFrame'; //change to choose tolerance frame
+    document.querySelector('main').className = 'AreaProcessingFrame';
+    document.getElementById('ScaleCanvas').style.display = 'none';
+    document.getElementById('SelectionCanvas').style.display = 'block';
   }
 }
