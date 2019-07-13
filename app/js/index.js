@@ -31,8 +31,14 @@ function canvas_init(img) {
 
   //Display the img on all canvas
   for (canvas of canvas_arr) {
+    var navH = Math.floor(document.querySelector('nav').offsetHeight),
+      footH = Math.floor(document.querySelector('footer').offsetHeight);
     canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight - 300;
+    canvas.height = window.innerHeight - navH - footH;
+    canvas.style.height = 'calc(100vh - ' + (navH + footH) + 'px)';
+    canvas.style.top = navH + 'px';
+    // document.querySelector('#video_container > video').style.top = navH + 'px';
+    // console.log('calc(100vh - ' + (navH + footH) + 'px)');
 
     //Try proportionally fiting the image size to the width of canvas
     var ratio = img.width / img.height;
@@ -90,7 +96,6 @@ function select_area() {
           point_clicked_on_canvas.y <= img_y + new_img_height
         ) {
           total_pix = 0;
-          console.log('Slider activated');
           //Get the canvas and context for area selecction
           var canvas = document.getElementById('SelectionCanvas');
           var ctx = canvas.getContext('2d');
@@ -480,6 +485,7 @@ function change_state(state) {
   if (state == 'scale') {
     choose_scale(); // send the pic to scale
     document.querySelector('main').className = 'ChooseScaleFrame';
+    document.getElementById('input_button_container').style.display = 'none';
     document.getElementById('video_container').style.display = 'none';
     document.getElementById('ScaleCanvas').style.display = 'block';
     document.getElementById('SelectionCanvas').style.display = 'none';
@@ -488,6 +494,7 @@ function change_state(state) {
   if (state == 'processing') {
     select_area();
     document.querySelector('main').className = 'AreaProcessingFrame';
+    document.getElementById('input_button_container').style.display = 'none';
     document.getElementById('ScaleCanvas').style.display = 'none';
     document.getElementById('SelectionCanvas').style.display = 'block';
   }

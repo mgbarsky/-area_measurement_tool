@@ -44,7 +44,7 @@ canvas {
   top: 0;
   left: 0;
   width: 100vw;
-  height: calc(100vh - 300px);
+  height: 100vh;
   z-index: 0;
 }
 /*To make canvas, choose button, and video container centered*/
@@ -64,8 +64,9 @@ main > div {
 
 /*To make the video as large as possible*/
 video {
-  width: 100%;
-  height: 100%;
+  position: fixed;
+  width: 100vw;
+  height: 100vh;
 }
 
 /*For changing states (frames) of nav and footer*/
@@ -194,5 +195,5 @@ canvas {
 
 /*To make the copy right font size small*/
 footer > div:first-child {
-  font-size: 0.6em;
+  font-size: 9px;
 }
