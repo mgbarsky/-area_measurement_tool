@@ -3,9 +3,9 @@
   <head>
     <title>Color Seletor</title>
     <meta charset="UTF-8" />
-    <link href="css/index.css?v=5" rel="stylesheet" type="text/css" />
-    <script src="js/take_photo.js?v=3" defer></script>
-    <script src="js/index.js?v=3" defer></script>
+    <link href="css/index.css?v=7" rel="stylesheet" type="text/css" />
+    <script src="js/take_photo.js?v=5" defer></script>
+    <script src="js/index.js?v=5" defer></script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
   </head>
   <body>
@@ -14,44 +14,40 @@
         <h1>Area Measuremnt App</h1>
 
         <h1>
-          <a onclick="change_state('input')" class="previous">&#129092;</a>
+          <a onclick="change_state('input')" class="previous">◀</a>
           Select image
         </h1>
 
         <h1>
-          <a onclick="change_state('input')" class="previous">&#129092;</a>
+          <a onclick="change_state('input')" class="previous">◀</a>
           Calibrate
         </h1>
 
         <h1>
-          <a onclick="change_state('scale')" class="previous">&#129092;</a>
+          <a onclick="change_state('scale')" class="previous">◀</a>
           Compute
         </h1>
       </nav>
 
-      <div id="input_button_container">
-        <label onclick="change_state('video')">Take Photo</label>
-        <div class="image-upload">
-          <label for="file-input">Choose File</label>
-          <input
-            id="file-input"
-            type="file"
-            accept=".tif,.jpg,.gif,.png,.raw,.jpeg"
-            onchange="uploadPic()"
-          />
-        </div>
-      </div>
-
-      <div id="video_container">
-        <video autoplay></video>
-      </div>
-
+      <video autoplay></video>
       <canvas id="ScaleCanvas"></canvas>
       <canvas id="SelectionCanvas"></canvas>
 
       <footer>
         <div>
-          Copyright © 2019 Ziyuan Li (Arthur) & Andrew Barsky
+          <div id="input_button_container">
+            <label onclick="change_state('video')">Take Photo</label>
+            <div class="image-upload">
+              <label for="file-input">Choose File</label>
+              <input
+                id="file-input"
+                type="file"
+                accept=".tif,.jpg,.gif,.png,.raw,.jpeg"
+                onchange="uploadPic()"
+              />
+            </div>
+          </div>
+          <p>Copyright © 2019 Ziyuan Li (Arthur) & Andrew Barsky</p>
         </div>
 
         <div>
@@ -72,13 +68,16 @@
             <input
               type="range"
               min="0"
-              max="100"
-              value="40"
+              max="85"
+              value="30"
               class="slider"
               id="toleranceRange"
             />
-            Tolerance: <span id="toleranceVal"></span>
-            <h4>Area seleted (cm<sup>2</sup>): <span id="areaVal">0</span></h4>
+            <span>Tolerance: <span id="toleranceVal"></span><span>
+            <h4>
+              <p>Area (cm<sup>2</sup>): <span id="areaVal">0</span></p>
+              <label onclick="change_state('input')">Done</label>
+            </h4>
           </div>
         </div>
       </footer>

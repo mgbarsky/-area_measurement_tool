@@ -1,6 +1,6 @@
 body {
   font-family: Tahoma, Geneva, sans-serif;
-  font-size: 1.6em;
+  font-size: 1.45em;
   background: #e1e2e1;
   margin: 0;
 }
@@ -56,15 +56,18 @@ main > div {
   justify-content: center;
   align-items: center;
 }
-/*Makes the containers exept canvas responsive*/
-main > div {
-  height: calc(100vh - 300px);
-  left: 0;
-}
 
+#input_button_container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
 /*To make the video as large as possible*/
 video {
   position: fixed;
+  top: 0;
+  left: 0;
   width: 100vw;
   height: 100vh;
 }
@@ -95,11 +98,11 @@ label {
   cursor: pointer;
   background: #bf360c;
   color: white;
-  margin: 1ex;
   padding: 0.5ex;
   border: none;
   border-radius: 3px;
   user-select: none;
+  margin-bottom: 15px;
 }
 /*To create the clicked effects*/
 label:active {
@@ -110,12 +113,12 @@ label:active {
 /*To add margin to select and style the label differently*/
 select {
   margin-bottom: 1ex;
-  font-size: 0.8em;
+  font-size: 0.7em;
 }
 .select label {
   background: none;
   color: black;
-  font-size: 0.8em;
+  font-size: 0.7em;
 }
 
 /*Slider*/
@@ -181,19 +184,38 @@ h1 {
 
 /*To style the container for the numeric results of area computation*/
 h4 {
-  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
   background: #005662;
   color: white;
   font-weight: 400;
+  margin: 18px 0 0 0;
+}
+/*To change the margin of the element in h4*/
+h4 > p,
+h4 > label {
+  margin: 2px 0 10px 0;
+}
+
+/*To make the slider container as large as the vw by default*/
+#slidecontainer {
+  width: 100vw;
 }
 
 /*For hiding containers in the begining frame*/
-#video_container,
+video,
 canvas {
   display: none;
 }
 
 /*To make the copy right font size small*/
-footer > div:first-child {
-  font-size: 9px;
+footer > div > p {
+  padding-top: 15px;
+  font-size: 12px;
+}
+
+canvas {
+  background-color: red;
 }

@@ -21,24 +21,29 @@ var first_scale_event = true;
 //to not run the event lisener mutiple times when go back button is clicked
 var first_area_event = true;
 
-//PROGRAM START WITH GETING PIC
+//PROGRAM START
 get_media();
 
-//Initialize canvas with the input pic (Resizing img from line 28 to 55)
+var navH = document.querySelector('nav').offsetHeight,
+  footH = document.querySelector('footer').offsetHeight;
+
+function init_video() {
+  document.querySelector('video').style.height =
+    window.innerHeight - navH - footH + 'px';
+  document.querySelector('video').style.top = navH + 'px';
+}
+
+//Initialize canvas with the input pic (Resiz ing img from line 28 to 55)
 function canvas_init(img) {
-  var canvas_arr = document.querySelectorAll('canvas'); //Select all canvas(2)
-  var slider_container = document.getElementById('slidecontainer');
+  var canvas_arr = document.querySelectorAll('canvas'); //Select all canvas (2)
 
   //Display the img on all canvas
   for (canvas of canvas_arr) {
-    var navH = Math.floor(document.querySelector('nav').offsetHeight),
-      footH = Math.floor(document.querySelector('footer').offsetHeight);
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight - navH - footH;
-    canvas.style.height = 'calc(100vh - ' + (navH + footH) + 'px)';
+
+    canvas.style.height = canvas.height + 'px';
     canvas.style.top = navH + 'px';
-    // document.querySelector('#video_container > video').style.top = navH + 'px';
-    // console.log('calc(100vh - ' + (navH + footH) + 'px)');
 
     //Try proportionally fiting the image size to the width of canvas
     var ratio = img.width / img.height;
@@ -60,8 +65,11 @@ function canvas_init(img) {
     ctx.drawImage(img, img_x, img_y, new_img_width, new_img_height);
   }
 
-  //Resize the slider width as same as canvas
-  slider_container.style.width = new_img_width + 'px';
+  var slider_container = document.getElementById('slidecontainer');
+  //Resize the slider width as same as canvas, when the screen is large
+  if (window.innerWidth > 600) {
+    slider_container.style.width = new_img_width + 'px';
+  }
 
   //Save an original copy of the img in the format of json
   var img = document
@@ -470,15 +478,18 @@ function change_state(state) {
   // change to the choose input frame
   if (state == 'input') {
     document.querySelector('main').className = 'ChooseInputFrame';
-    document.getElementById('input_button_container').style.display = 'flex';
-    document.getElementById('video_container').style.display = 'none';
-    document.getElementById('ScaleCanvas').style.display = 'none';
+    location.reload();
+    //document.getElementById('input_button_container').style.display = 'flex';
+    //document.querySelector('video').style.display = 'none';
+    //document.getElementById('ScaleCanvas').style.display = 'none';
+    //document.getElementById('SelectionCanvas').style.display = 'none';
   }
   //change to takePic frame
   if (state == 'video') {
+    init_video();
     document.querySelector('main').className = 'TakePicFrame';
     document.getElementById('input_button_container').style.display = 'none';
-    document.getElementById('video_container').style.display = 'flex';
+    document.querySelector('video').style.display = 'block';
     document.getElementById('ScaleCanvas').style.display = 'none';
   }
   //change to choose scale frame
@@ -486,7 +497,7 @@ function change_state(state) {
     choose_scale(); // send the pic to scale
     document.querySelector('main').className = 'ChooseScaleFrame';
     document.getElementById('input_button_container').style.display = 'none';
-    document.getElementById('video_container').style.display = 'none';
+    document.querySelector('video').style.display = 'none';
     document.getElementById('ScaleCanvas').style.display = 'block';
     document.getElementById('SelectionCanvas').style.display = 'none';
   }
