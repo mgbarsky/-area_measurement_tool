@@ -214,8 +214,5 @@ canvas {
 footer > div > p {
   padding-top: 15px;
   font-size: 12px;
-}
-
-canvas {
-  background-color: red;
+  user-select: none;
 }

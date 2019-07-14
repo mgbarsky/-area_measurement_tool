@@ -20,14 +20,16 @@ var first_scale_event = true;
 //Check if the select_area function is first runed
 //to not run the event lisener mutiple times when go back button is clicked
 var first_area_event = true;
+//To store the height of nav and foot
+var navH;
+var footH;
 
 //PROGRAM START
 get_media();
 
-var navH = document.querySelector('nav').offsetHeight,
-  footH = document.querySelector('footer').offsetHeight;
-
 function init_video() {
+  navH = document.querySelector('nav').offsetHeight;
+  footH = document.querySelector('footer').offsetHeight;
   document.querySelector('video').style.height =
     window.innerHeight - navH - footH + 'px';
   document.querySelector('video').style.top = navH + 'px';
@@ -486,7 +488,6 @@ function change_state(state) {
   }
   //change to takePic frame
   if (state == 'video') {
-    init_video();
     document.querySelector('main').className = 'TakePicFrame';
     document.getElementById('input_button_container').style.display = 'none';
     document.querySelector('video').style.display = 'block';
